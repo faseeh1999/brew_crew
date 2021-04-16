@@ -117,7 +117,10 @@ class _RegisterState extends State<Register> {
                           }
                         }
                       },
-                      child: Text("Register"),
+                      child: Text(
+                        "Register",
+                        style: buttonTextStyle,
+                      ),
                     ),
                     SizedBox(
                       height: 40,

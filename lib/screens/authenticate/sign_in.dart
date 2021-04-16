@@ -46,90 +46,117 @@ class _SignInState extends State<SignIn> {
                         ))),
               ],
             ),
-            body: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      decoration: textInputDecoration.copyWith(
-                        hintText: "Email",
+            body: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return "Enter an Email";
-                        } else if (!val.contains("@") ||
-                            !val.contains(".com")) {
-                          return "Enter a Valid Email";
-                        }
-                        return null;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          email = val;
-                        });
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      decoration: textInputDecoration.copyWith(
-                        hintText: "Password",
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                          hintText: "Email",
+                        ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return "Enter an Email";
+                          } else if (!val.contains("@") ||
+                              !val.contains(".com")) {
+                            return "Enter a Valid Email";
+                          }
+                          return null;
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            email = val;
+                          });
+                        },
+                        keyboardType: TextInputType.emailAddress,
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return "Enter a Password";
-                        } else if (val.length < 6 || val.length > 20) {
-                          return "Length Should be between 6 & 20 Characters";
-                        }
-                        return null;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          password = val;
-                        });
-                      },
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RaisedButton(
-                      color: Colors.pink[300],
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                          hintText: "Password",
+                        ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (val) {
+                          if (val.isEmpty) {
+                            return "Enter a Password";
+                          } else if (val.length < 6 || val.length > 20) {
+                            return "Length Should be between 6 & 20 Characters";
+                          }
+                          return null;
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            password = val;
+                          });
+                        },
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      RaisedButton(
+                        color: Colors.pink[300],
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            setState(() {
+                              loading = true;
+                            });
+                            dynamic result = await _auth
+                                .signInWithEmailAndPassword(email, password);
+                            if (result == null) {
+                              setState(() {
+                                loading = false;
+                                error = "Invalid Credentials";
+                              });
+                            }
+                          }
+                        },
+                        child: Text(
+                          "Sign In",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      RaisedButton(
+                        color: Colors.pink[300],
+                        onPressed: () async {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = await _auth
-                              .signInWithEmailAndPassword(email, password);
+                          dynamic result = await _auth.signInAnon();
                           if (result == null) {
                             setState(() {
                               loading = false;
-                              error = "Invalid Credentials";
+                              error = "Network Error";
                             });
                           }
-                        }
-                      },
-                      child: Text("Sign In"),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red, fontSize: 14.0),
-                    ),
-                  ],
+                        },
+                        child: Text(
+                          "Anon",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text(
+                        error,
+                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
