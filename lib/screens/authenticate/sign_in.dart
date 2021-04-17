@@ -129,25 +129,6 @@ class _SignInState extends State<SignIn> {
                       SizedBox(
                         height: 20,
                       ),
-                      RaisedButton(
-                        color: Colors.pink[300],
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          dynamic result = await _auth.signInAnon();
-                          if (result == null) {
-                            setState(() {
-                              loading = false;
-                              error = "Network Error";
-                            });
-                          }
-                        },
-                        child: Text(
-                          "Anon",
-                          style: buttonTextStyle,
-                        ),
-                      ),
                       SizedBox(
                         height: 40,
                       ),
